@@ -16,6 +16,7 @@ To run tests:
 
 
 To run the server locally:
+-) sudo apt install -y default-libmysqlclient-dev
 -) pip install -r requirements.txt
 -) set up settings_secret.py; use SqlLite database
 -) Run development server with `./manage.py runserver`
@@ -38,3 +39,22 @@ Machine dependencies:
 -) MySQL or sqlite
 -) Ability to build python3 lxml from source or install system package (e.g. ubuntu python3-lxml)
 -) libssl-dev on Linux
+
+# Limitations
+Unable to install python dependencies on Debian 11 (10 and 12 are untested). Issue is with compiling
+the mysqlclient library. This is likely due to the old version of the python library not working with
+the new version of default-libmysqlclient-dev.
+
+```
+   _mysql.c: In function ‘_mysql_ConnectionObject_ping’:
+    _mysql.c:1911:41: error: ‘MYSQL’ {aka ‘struct st_mysql’} has no member named ‘reconnect’
+     1911 |  if ( reconnect != -1 ) self->connection.reconnect = reconnect;
+          |                                         ^
+```
+
+The most likely immediate path forward here is to try this again with Debian 10, which is still
+getting security updates.
+
+The long term solution is going to be to update the version of the mysql python library, which
+will likely require updating to a newer version of Django, which will likely cascade into many
+other libraries.

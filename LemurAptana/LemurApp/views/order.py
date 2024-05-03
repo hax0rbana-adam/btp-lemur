@@ -2,9 +2,10 @@ import json
 from datetime import datetime
 
 import logging
-from django.core.urlresolvers import reverse
+#from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.http import HttpResponseBadRequest, HttpResponse, Http404, JsonResponse
-from django.shortcuts import redirect, get_object_or_404, render_to_response
+from django.shortcuts import redirect, get_object_or_404, render
 from django.template import RequestContext
 from django.template.loader import render_to_string
 
@@ -182,7 +183,8 @@ def order_build(request):
 
   context_dict['currentOrderHTML'] = order_get_snippet_html(request)
   context_dict['currentOrderWarningsHTML'] = order_get_warnings_html(request)
-  return render_to_response('LemurApp/order_build.html', context_dict, context_instance=RequestContext(request))
+  #return render_to_response('LemurApp/order_build.html', context_dict, context_instance=RequestContext(request))
+  return render(request, 'LemurApp/order_build.html', context_dict)
 
 
 def order_send_out(request):
@@ -205,7 +207,8 @@ def order_send_out(request):
   #   else:
   #     form = None
   # return render_to_response('LemurApp/order_sendout.html', {'form': form}, context_instance=RequestContext(request))
-  return render_to_response('LemurApp/order_sendout.html', context_instance=RequestContext(request))
+  #return render_to_response('LemurApp/order_sendout.html', context_instance=RequestContext(request))
+  return render(request, 'LemurApp/order_sendout.html')
 
 
 def order_unset(request):

@@ -2,7 +2,7 @@ from multiprocessing.dummy import Pool
 
 from django.core.paginator import Paginator, EmptyPage, InvalidPage
 from django.http import Http404, JsonResponse
-from django.shortcuts import render_to_response
+from django.shortcuts import render
 from django.template import RequestContext
 
 from LemurAptana.LemurApp import forms
@@ -61,7 +61,7 @@ def inmate_search(request, pk=None):
     context_dict['has_results'] = True
   else:
     context_dict['form'] = forms.InmateForm()  # An unbound form
-  return render_to_response('LemurApp/inmate_search.html', context_dict, context_instance=RequestContext(request))
+  return render_to_response(request, 'LemurApp/inmate_search.html', context_dict)
 
 
 def inmate_add_searched(request):
@@ -72,7 +72,7 @@ def inmate_add_searched(request):
       page, but that page doesn't ask for all inmate details so there's no way that all the necessary information could
       be here)"""
   context_dict = {'form': forms.InmateForm(request.GET)}
-  return render_to_response('LemurApp/inmate_add.html', context_dict, context_instance=RequestContext(request))
+  return render_to_response(request, 'LemurApp/inmate_add.html', context_dict)
 
 
 def inmate_search_proxy(request, pk):

@@ -59,7 +59,7 @@ class Migration(migrations.Migration):
                 ('last_name', models.CharField(max_length=250, verbose_name='Last name')),
                 ('address', models.CharField(max_length=250, null=True, verbose_name='Address', blank=True)),
                 ('creation_date', models.DateTimeField(default=datetime.datetime.now, editable=False)),
-                ('facility', models.ForeignKey(to='LemurApp.Facility')),
+                ('facility', models.ForeignKey(to='LemurApp.Facility', on_delete=models.CASCADE)),
             ],
             options={
             },
@@ -73,7 +73,7 @@ class Migration(migrations.Migration):
                 ('date_opened', models.DateTimeField(default=datetime.datetime.now, verbose_name='Date opened', editable=False)),
                 ('date_closed', models.DateTimeField(null=True, verbose_name='Date closed', blank=True)),
                 ('sender', models.CharField(max_length=250, null=True, verbose_name='Sender', blank=True)),
-                ('inmate', models.ForeignKey(verbose_name='Inmate', to='LemurApp.Inmate')),
+                ('inmate', models.ForeignKey(verbose_name='Inmate', to='LemurApp.Inmate', on_delete=models.CASCADE)),
             ],
             options={
             },
@@ -82,7 +82,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='book',
             name='order',
-            field=models.ForeignKey(to='LemurApp.Order'),
+            field=models.ForeignKey(to='LemurApp.Order', on_delete=models.CASCADE),
             preserve_default=True,
         ),
     ]

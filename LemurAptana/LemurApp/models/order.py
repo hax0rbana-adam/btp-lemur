@@ -20,7 +20,7 @@ class Order(models.Model):
 
   # actual fields
   status = models.CharField(max_length=20, choices=ORDER_STATUS, default='OPEN', verbose_name="Order status")
-  inmate = models.ForeignKey(Inmate, verbose_name="Inmate", related_name="orders")
+  inmate = models.ForeignKey(Inmate, verbose_name="Inmate", related_name="orders", on_delete=models.CASCADE)
   date_opened = models.DateTimeField(default=datetime.datetime.now, editable=False, verbose_name="Date opened")
   date_closed = models.DateTimeField(blank=True, null=True, verbose_name="Date closed")
   sender = models.CharField(max_length=250, null=True, blank=True, verbose_name="Sender")
@@ -31,7 +31,7 @@ class Order(models.Model):
   def __str__(self):
     return 'Order #' + str(self.pk)
 
-  @models.permalink
+  #@models.permalink
   def get_absolute_url(self):
     return 'order-detail', (), {'pk': self.pk}
 

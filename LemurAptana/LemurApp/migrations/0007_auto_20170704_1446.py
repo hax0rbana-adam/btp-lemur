@@ -19,11 +19,11 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='book',
             name='order',
-            field=models.ForeignKey(related_name='books', to='LemurApp.Order'),
+            field=models.ForeignKey(related_name='books', to='LemurApp.Order', on_delete=models.CASCADE),
         ),
         migrations.AlterField(
             model_name='order',
             name='inmate',
-            field=models.ForeignKey(verbose_name='Inmate', related_name='orders', to='LemurApp.Inmate'),
+            field=models.ForeignKey(verbose_name='Inmate', related_name='orders', to='LemurApp.Inmate', on_delete=models.CASCADE),
         ),
     ]

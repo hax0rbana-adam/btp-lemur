@@ -1,5 +1,4 @@
-from django.shortcuts import render_to_response
-
+from django.shortcuts import render
 
 def data_export(request):
-  return render_to_response('LemurApp/data_export.html')
+  return render(request, 'LemurApp/data_export.html')

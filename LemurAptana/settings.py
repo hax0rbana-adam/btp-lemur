@@ -38,6 +38,7 @@ USE_I18N = False
 # calendars according to the current locale
 USE_L10N = True
 
+base_project_directory = "/home/user/btp-lemur"
 # Absolute path to the directory that holds media.
 # Example: "/home/media/media.lawrence.com/"
 # MEDIA_ROOT = base_project_directory + 'media/'
@@ -86,7 +87,7 @@ TEMPLATES = [
 ]
 
 
-MIDDLEWARE_CLASSES = (
+MIDDLEWARE = (
   'django.middleware.common.CommonMiddleware',
   'django.contrib.sessions.middleware.SessionMiddleware',
   'django.middleware.csrf.CsrfViewMiddleware',

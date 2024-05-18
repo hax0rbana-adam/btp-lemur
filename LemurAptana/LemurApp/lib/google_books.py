@@ -4,7 +4,8 @@ from apiclient import discovery
 from django.conf import settings
 
 # just build this at import time I guess
-service = discovery.build('books', 'v1', developerKey=settings.GBOOKS_KEY)
+#service = discovery.build('books', 'v1', developerKey=settings.GBOOKS_KEY)
+service = None
 
 RESULTS_PER_PAGE = 10
 

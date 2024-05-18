@@ -16,13 +16,18 @@ To run tests:
 
 
 To run the server locally:
--) sudo apt install -y default-libmysqlclient-dev
--) pip install -r requirements.txt
--) set up settings_secret.py; use SqlLite database
--) Run development server with `./manage.py runserver`
+-) sudo apt install -y default-libmysqlclient-dev pkg-config npm
+-) sudo npm install --global yarn
 -) install client deps with `yarn` in root directory
 -) install webpack globally if it isn't with `yarn global add webpack` (webpack 2.5.1 works)
 -) Build/watch webpack assets with `webpack -w` in base project directory
+-) pip install -r requirements.txt
+-) set up settings_secret.py; use SqlLite database
+-) Run development server with `./manage.py runserver 0.0.0.0:8000`
+
+Note: if you want to access your local dev server from another computer, add
+`ALLOWED_HOSTS = ['192.168.1.37']` to LemurAptana/settings.py (swapping in the
+client's IP address in place of the example)
 
 To manage the server in production:
 -) Various packages need be installed, including: `apt-get install libffi-dev`

@@ -21,7 +21,6 @@ urlpatterns = [ #patterns(
   re_path(r'^inmate/doc_autocomplete/$', inmate_doc_autocomplete, name='inmate-search-autocomplete'),
   re_path(r'^order/build/$', order_build, name='order-build'),
   re_path(r'^order/create/(?P<inmate_pk>\d+)/$', order_create, name='order-create'),
-  # url(r'^order/addbook/ASIN/$', 'order_add_book_asin', name='order-add-book-ASIN'),
   re_path(r'^order/addbook/ISBN/$', order_add_book_isbn, name='order-add-book-ISBN'),
   re_path(r'^order/addbook/custom/$', order_add_book_custom, name='order-add-book-custom'),
   re_path(r'^order/removebook/(?P<book_pk>\d+)/$', order_remove_book, name='order-book-remove'),
@@ -31,20 +30,14 @@ urlpatterns = [ #patterns(
   re_path(r'^order/reopen/(?P<order_pk>\d+)/$', order_reopen, name='order-reopen'),
   re_path(r'^order/current/$', order_current, name='order-current'),
   re_path(r'^data_export/$', data_export, name='data-export'),
-] #)
-
-# Generic views
-urlpatterns += [ #patterns(
+  # Generic views
   #'',
   re_path(r'^inmate/add/$', generic_views.InmateCreate.as_view(), name="inmate-add"),
   re_path(r'^order/list/$', generic_views.OrderList.as_view(), name="order-oldlist"),
   re_path(r'^order/cleanup/$', generic_views.OrderCleanupList.as_view(), name='order-cleanup'),
   re_path(r'^order/detail/(?P<pk>\d+)/$', generic_views.OrderDetail.as_view(), name="order-detail"),
   re_path(r'^order/invoice/(?P<pk>\d+)/$', generic_views.OrderInvoice.as_view(), name="order-invoice"),
-] # )
-
-# API views
-urlpatterns += [
+  # API views
   re_path(r'^api/', include(router.urls)),
   re_path(r'^schema/$', get_schema_view(title='BTP API')),
   re_path(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),

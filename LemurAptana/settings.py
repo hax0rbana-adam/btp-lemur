@@ -8,6 +8,7 @@ FORCE_SCRIPT_NAME = ''
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
+ALLOWED_HOSTS = ['192.168.192.85']
 
 ADMINS = (
   ('Tom Wiltzius', 'tom.wiltzius@gmail.com'),
@@ -72,12 +73,12 @@ TEMPLATES = [
         'django.template.loaders.app_directories.Loader',
       ],
       'context_processors': (
-        "django.core.context_processors.debug",
-        "django.core.context_processors.i18n",
-        "django.core.context_processors.media",
+        "django.template.context_processors.debug",
+        "django.template.context_processors.i18n",
+        "django.template.context_processors.media",
         "django.contrib.messages.context_processors.messages",
         "django.contrib.auth.context_processors.auth",
-        "django.core.context_processors.request",
+        "django.template.context_processors.request",
         "LemurAptana.LemurApp.context_processors.restricted_facilities",
         "LemurAptana.LemurApp.context_processors.banner_message"
       ),
@@ -104,7 +105,9 @@ TEST_RUNNER = 'django.test.runner.DiscoverRunner'
 # Makes sessions expire when the browser is closed rather than persisting
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
-SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'
+# Django 5.0 removed the PickleSerializer, so we now use the JSON one
+# https://docs.djangoproject.com/en/5.0/releases/5.0/
+SESSION_SERIALIZER = 'django.core.signing.JSONSerializer'
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 

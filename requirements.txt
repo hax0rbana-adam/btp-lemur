@@ -3,7 +3,7 @@ uwsgi
 pydash
 raven
 ipdb
-Django
+Django==5.0.6
 mysqlclient
 requests
 beautifulsoup4==4.6.0
@@ -13,8 +13,9 @@ pyasn1==0.1.9
 pyOpenSSL
 google-api-python-client==1.6.2
 fuzzywuzzy==0.15.0
-coreapi==2.3.1
-djangorestframework
+coreapi==2.3.3
+djangorestframework==3.15.2
 usaddress==0.5.10
-python-Levenshtein==0.12.0
+python-Levenshtein==0.25.1
 django-debug-toolbar
+setuptools

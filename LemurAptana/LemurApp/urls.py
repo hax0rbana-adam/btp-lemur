@@ -41,5 +41,5 @@ urlpatterns = [ #patterns(
   re_path(r'^api/', include(router.urls)),
   re_path(r'^schema/$', get_schema_view(title='BTP API')),
   re_path(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
-  re_path(r'^docs/', include_docs_urls(title='My API service'))
+  re_path(r'^docs/', include_docs_urls(title='My API service'), name='api-docs')
 ]

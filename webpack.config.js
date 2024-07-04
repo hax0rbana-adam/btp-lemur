@@ -5,15 +5,17 @@ var BundleTracker = require('webpack-bundle-tracker');
 module.exports = {
   context: __dirname,
 
+  mode: 'development',
+
   entry: './assets/js/index', // entry point of our app. assets/js/index.js should require other js modules and dependencies it needs
 
   output: {
       path: path.resolve('./assets/bundles/'),
-      filename: "[name]-[hash].js"
+      filename: "[name]-[fullhash].js"
   },
 
   plugins: [
-    new BundleTracker({filename: './webpack-stats.json'})
+    new BundleTracker({filename: 'webpack-stats.json', path: __dirname})
   ],
 
   module: {
@@ -28,7 +30,7 @@ module.exports = {
   },
 
   resolve: {
-    modules: ['node_modules', 'bower_components'],
+    modules: ['node_modules'],
     extensions: ['.js', '.jsx']
   }
 };

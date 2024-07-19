@@ -128,6 +128,7 @@ REST_FRAMEWORK = {
   'PAGE_SIZE': 10,
   'DEFAULT_AUTHENTICATION_CLASSES': [],
   'DEFAULT_PERMISSION_CLASSES': [],
+  'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema'
 }
 
 INSTALLED_APPS = (

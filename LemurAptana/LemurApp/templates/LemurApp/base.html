@@ -9,14 +9,14 @@
 <head>
   <title>BTP | {% block title %}Books to Prisoners{% endblock %}</title>
   <link rel="stylesheet" href="/static/css/style.css"/>
-  <script src="https://cdn.ravenjs.com/3.16.1/raven.min.js" crossorigin="anonymous"></script>
+  <script src="/static/js/raven.min.js" crossorigin="anonymous"></script>
   <script>Raven.config('{% sentry_public_dsn %}').install()</script>
   <!-- TODO do we need these libraries loaded like this anymore, since we have webpack bundling now? -->
-  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script type="text/javascript" src="/static/js/jquery.min.js"></script>
   <script type="text/javascript" src="/static/js-vendor/csrf-jquery-hack.js"></script>
 
   {% load static %}
-  <script src="{% static 'rest_framework/js/coreapi-0.1.0.js' %}"></script>
+  <script src="{% static 'rest_framework/js/coreapi-0.1.1.js' %}"></script>
   <script src="{% url 'api-docs:schema-js' %}"></script>
 
   {% block extra_head %}{% endblock %}

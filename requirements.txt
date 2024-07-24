@@ -6,13 +6,13 @@ ipdb
 Django==5.0.6
 mysqlclient
 requests
-beautifulsoup4==4.6.0
+beautifulsoup4
 django-webpack-loader
 ndg-httpsclient==0.4.0
 pyasn1==0.1.9
 pyOpenSSL
 google-api-python-client==1.6.2
-fuzzywuzzy==0.15.0
+fuzzywuzzy
 coreapi==2.3.3
 djangorestframework==3.15.2
 usaddress==0.5.10

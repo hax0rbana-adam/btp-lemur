@@ -53,6 +53,25 @@ sudo npm i -g npm-check-updates
 ncu -u
 ```
 
+# Development setup
+If you start the application, the database schema will be created automatically, however it will not have all of the data filled out for the application to run. After attempting to run the app once, you'll need to manually insert some records into the database.
+
+If you are using sqlite, you can get a SQL console with `sqlite3 sqlite.db`
+
+## Banner
+From an SQL console, run this:
+
+```
+INSERT INTO LemurApp_bannermessage(message, handle) VALUES("Banner message goes here", 1);
+```
+
+## Admin user
+From a shell, run this:
+
+`python manage.py createsuperuser --username=joe --email=joe@example.com`
+
+Ref: https://docs.djangoproject.com/en/5.0/topics/auth/default/#creating-users
+
 # Limitations
 Unable to install python dependencies on Debian 11 (10 and 12 are untested). Issue is with compiling
 the mysqlclient library. This is likely due to the old version of the python library not working with

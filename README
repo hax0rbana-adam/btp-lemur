@@ -72,6 +72,8 @@ From a shell, run this:
 
 Ref: https://docs.djangoproject.com/en/5.0/topics/auth/default/#creating-users
 
+After creating the admin user, log in as the admin and create a Facility called "Other". This needs to be the first entry created (or, more specifically, it needs to have a primary key of 1) and it is special cased in the code to force the user to enter the address of an unknown facility. No inmates can be added until at least one facility exists.
+
 # Limitations
 Unable to install python dependencies on Debian 11 (10 and 12 are untested). Issue is with compiling
 the mysqlclient library. This is likely due to the old version of the python library not working with

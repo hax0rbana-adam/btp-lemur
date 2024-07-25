@@ -16,7 +16,7 @@ To run tests:
 
 
 To run the server locally:
--) sudo apt install -y default-libmysqlclient-dev pkg-config npm
+-) sudo apt install -y default-libmysqlclient-dev pkg-config npm python3-docutils python3-levenshtein python3-setuptools
 -) sudo npm install --global yarn
 -) install client deps with `yarn` in root directory
 -) install webpack globally if it isn't with `yarn global add webpack` (webpack 2.5.1 works)

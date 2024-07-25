@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import InmateSearchProxy from './InmateSearchProxy.jsx';
 import OrderReopenLink from './OrderReopenLink.jsx';
 import InmateAddEditForm from './InmateAddEditForm';
@@ -11,31 +12,37 @@ import OrderSummary from "./OrderSummary";
 const inmate_search_proxy_containers = document.querySelectorAll('.inmateSearchProxyContainer');
 Array.from(inmate_search_proxy_containers).forEach(el => {
   const inmate_pk = el.attributes["data-inmate-id"].value;
-  ReactDOM.render(<InmateSearchProxy inmatePk={inmate_pk}/>, el);
+  const root = createRoot(el);
+  root.render(<InmateSearchProxy inmatePk={inmate_pk}/>);
 });
 
 const alert_link_containers = document.querySelectorAll('.orderReopenLink');
 Array.from(alert_link_containers).forEach((el) => {
   const order_href = el.attributes["data-order-href"].value;
-  ReactDOM.render(<OrderReopenLink orderHref={order_href}/>, el);
+  const root = createRoot(el);
+  root.render(<OrderReopenLink orderHref={order_href}/>);
 });
 
 const inmate_add_edit_form = document.querySelectorAll('.inmateAddEditForm');
 Array.from(inmate_add_edit_form).forEach((el) => {
-  ReactDOM.render(<InmateAddEditForm/>, el);
+  const root = createRoot(el);
+  root.render(<InmateAddEditForm/>);
 });
 
 const order_sendout = document.querySelectorAll('.orderCompleteForm');
 Array.from(order_sendout).forEach((el) => {
-  ReactDOM.render(<OrderCompleteForm/>, el);
+  const root = createRoot(el);
+  root.render(<OrderCompleteForm/>);
 });
 
 const order_detail = document.querySelectorAll('.orderDetail');
 Array.from(order_detail).forEach((el) => {
-  ReactDOM.render(<OrderDetail/>, el);
+  const root = createRoot(el);
+  root.render(<OrderDetail/>);
 });
 
 const order_summary = document.querySelectorAll('.orderSummary');
 Array.from(order_summary).forEach((el) => {
-  ReactDOM.render(<OrderSummary/>, el);
+  const root = createRoot(el);
+  root.render(<OrderSummary/>);
 });

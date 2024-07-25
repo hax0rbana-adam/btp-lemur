@@ -2,6 +2,7 @@ from django.core.serializers import serialize
 from django.db.models.query import QuerySet
 import json
 from django import template
+from django.utils.safestring import mark_safe
 from LemurAptana.LemurApp.models import Inmate
 
 register = template.Library()
@@ -25,9 +26,9 @@ def inmate_doc_link(inmate_pk, link_text):
     if inmate.inmate_type() is None:
         return 'No inmate ID'
     elif inmate.inmate_type() == Inmate.InmateType.FEDERAL:
-        return 'No DOC link for Federal inmates; manually search <a target="_blank" href="https://www.bop.gov/inmateloc/">here</a>'
+        return mark_safe('No DOC link for Federal inmates; manually search <a target="_blank" href="https://www.bop.gov/inmateloc/">here</a>')
     elif inmate.inmate_type() == Inmate.InmateType.ILLINOIS:
-        return '''
+        return mark_safe('''
                 <form action="https://www.idoc.state.il.us/subsections/search/ISinms2.asp" style="display:none;" method="post" target="blank" id="inmateform%(inmate_pk)s">
                     <select name="selectlist1" size="4" onchange="setfocus()">
                         <option value="IDOC" selected="selected">&nbsp;</option>
@@ -35,16 +36,16 @@ def inmate_doc_link(inmate_pk, link_text):
                     <input type="text" size="16" name="idoc" value="%(inmate_id)s" maxlength="25" />
                 </form>
                 <a href="javascript:$('#inmateform%(inmate_pk)s').submit()">%(link_text)s</a>
-                ''' % {'inmate_id': inmate.inmate_id_formatted(), 'link_text': link_text, 'inmate_pk': inmate.pk}
+                ''' % {'inmate_id': inmate.inmate_id_formatted(), 'link_text': link_text, 'inmate_pk': inmate.pk})
     elif inmate.inmate_type() == Inmate.InmateType.KENTUCKY:
         if inmate.inmate_doc_id:
-            return ('<a target="_blank" href="http://kool.corrections.ky.gov/KOOL/Details/%s">%s</a>' %
+            return mark_safe('<a target="_blank" href="http://kool.corrections.ky.gov/KOOL/Details/%s">%s</a>' %
                     (inmate.inmate_doc_id, link_text))
         else:
             # TODO this sucks, fix by making this DOC tag an async react component instead of a sync template render
             return 'DOC link not yet available, still processing KOOL information'
     elif inmate.inmate_type() is Inmate.InmateType.VIRGINIA:
-        return '''
+        return mark_safe('''
                 <form action="https://vadoc.virginia.gov/offenders/locator/results.aspx" style="display:none;" method="post" target="blank" id="inmateform%(inmate_pk)s">
                     <select name="selectlist1" size="4" onchange="setfocus()">
                         <option value="IDOC" selected="selected">&nbsp;</option>
@@ -56,7 +57,7 @@ def inmate_doc_link(inmate_pk, link_text):
                     <input type="text" name="txtLastName" value="" />
                 </form>
                 <a href="javascript:$('#inmateform%(inmate_pk)s').submit()">%(link_text)s</a>
-        ''' % {'inmate_id': inmate.inmate_id, 'link_text': link_text, 'inmate_pk': inmate.pk}
+        ''' % {'inmate_id': inmate.inmate_id, 'link_text': link_text, 'inmate_pk': inmate.pk})
 
 
 # Below taken from http://djangosnippets.org/snippets/194/

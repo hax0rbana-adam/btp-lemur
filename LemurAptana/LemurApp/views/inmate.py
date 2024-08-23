@@ -130,11 +130,15 @@ def inmate_doc_autocomplete(request):
     # if searching by name, default to all the sites
     searches = [federal_search_proxy, illinois_search_proxy, kentucky_search_proxy]
 
-  with Pool(len(searches)) as p:
-    all_results = p.map(lambda search_fn: search_fn(first_name=first_name,
-                                                    last_name=last_name,
-                                                    inmate_id=inmate_id),
-                        searches)
+  all_results = []
+  try:
+    with Pool(len(searches)) as p:
+      all_results = p.map(lambda search_fn: search_fn(first_name=first_name,
+                                                      last_name=last_name,
+                                                      inmate_id=inmate_id),
+                          searches)
+  except Exception as e:
+    logger.warning("Unable to obtain information from DOC: "+str(e))
 
   final_results = []
   for result_set in all_results:

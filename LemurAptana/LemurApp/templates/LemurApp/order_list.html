@@ -40,7 +40,7 @@
     <ul>
       {% for order in order_list %}
         <li>
-          <a href="javascript:$('#order{{order.pk}}').toggle('fast')">{{order}}</a>, opened {{order.date_opened|date:"M j, Y"}} for {{order.inmate.first_name}} {{order.inmate.last_name}} [<a href="{% url 'order-set' order.pk %}">select this order</a>]
+          <a href="" onclick="$('#order{{order.pk}}').toggle('fast'); return false;">{{order}}</a>, opened {{order.date_opened|date:"M j, Y"}} for {{order.inmate.first_name}} {{order.inmate.last_name}} [<a href="{% url 'order-set' order.pk %}">select this order</a>]
           <ul id="order{{order.pk}}" style="display: none">
             {% for book in order.books.all %}
               <li>{{ book.title }}{% if book.author %}, by {{ book.author }}{% endif %}</li>

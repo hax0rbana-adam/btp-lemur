@@ -95,7 +95,7 @@
             </ul>
             <ul class="inmateHistory">
               <li>{% inmate_doc_link inmate.pk "Inmate DOC lookup" %}</li>
-              <li><a href="javascript:$('#inmateResult{{ inmate.pk }} .historyList').toggle('fast')">History</a>
+              <li><a href="" onclick="$('#inmateResult{{ inmate.pk }} .historyList').toggle('fast'); return false;">History</a>
                 <ul class="historyList" style="display:none;">
                   {% for order in inmate.orders.all %}
                     <li>

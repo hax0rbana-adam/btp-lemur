@@ -1,4 +1,4 @@
-import datetime
+from django.utils import timezone
 
 from django.db import models
 
@@ -13,7 +13,7 @@ class Book(models.Model):
   title = models.CharField(max_length=250, verbose_name="Title")
   author = models.CharField(max_length=250, verbose_name="Author", blank=True)
   order = models.ForeignKey('Order', related_name="books", on_delete=models.CASCADE)
-  creation_date = models.DateTimeField(default=datetime.datetime.now, editable=False, verbose_name="Creation date")
+  creation_date = models.DateTimeField(default=timezone.now, editable=False, verbose_name="Creation date")
 
   def __str__(self):
     if self.author:

@@ -1,3 +1,4 @@
+from logging import getLogger
 from multiprocessing.dummy import Pool
 
 from django.core.paginator import Paginator, EmptyPage, InvalidPage
@@ -10,6 +11,8 @@ from LemurAptana.LemurApp.lib.search_proxy.federal import federal_search_proxy
 from LemurAptana.LemurApp.lib.search_proxy.ky import kentucky_search_proxy
 from LemurAptana.LemurApp.lib.search_proxy.il import illinois_search_proxy
 from LemurAptana.LemurApp.models import Inmate, Facility
+
+logger = getLogger(__name__)
 
 
 def inmate_search(request, pk=None):
@@ -61,7 +64,13 @@ def inmate_search(request, pk=None):
     context_dict['has_results'] = True
   else:
     context_dict['form'] = forms.InmateForm()  # An unbound form
-  #return render_to_response(request, 'LemurApp/inmate_search.html', context_dict)
+
+  # Search does not require a first name and last name because the user may
+  # be searching by Inmate ID instead, or just last name, or just first name
+  context_dict['form'].fields['inmate_id'].required = False
+  context_dict['form'].fields['first_name'].required = False
+  context_dict['form'].fields['last_name'].required = False
+
   return render(request, 'LemurApp/inmate_search.html', context_dict)
 
 
@@ -73,21 +82,23 @@ def inmate_add_searched(request):
       page, but that page doesn't ask for all inmate details so there's no way that all the necessary information could
       be here)"""
   context_dict = {'form': forms.InmateForm(request.GET)}
-  #return render_to_response(request, 'LemurApp/inmate_add.html', context_dict)
   return render(request, 'LemurApp/inmate_add.html', context_dict)
 
 
 def inmate_search_proxy(request, pk):
   i = Inmate.objects.get(pk=pk)
   res = {}
-  if i.inmate_type() is Inmate.InmateType.FEDERAL:
-    res = federal_search_proxy(inmate_id=i.inmate_id)
-  elif i.inmate_type() is Inmate.InmateType.ILLINOIS:
-    res = illinois_search_proxy(inmate_id=i.inmate_id)
-  elif i.inmate_type() is Inmate.InmateType.KENTUCKY:
-    res = kentucky_search_proxy(inmate_id=i.inmate_id)
-  elif i.inmate_type() is Inmate.InmateType.VIRGINIA:
-    return JsonResponse({})
+  try:
+    if i.inmate_type() is Inmate.InmateType.FEDERAL:
+      res = federal_search_proxy(inmate_id=i.inmate_id)
+    elif i.inmate_type() is Inmate.InmateType.ILLINOIS:
+      res = illinois_search_proxy(inmate_id=i.inmate_id)
+    elif i.inmate_type() is Inmate.InmateType.KENTUCKY:
+      res = kentucky_search_proxy(inmate_id=i.inmate_id)
+    elif i.inmate_type() is Inmate.InmateType.VIRGINIA:
+      return JsonResponse({})
+  except Exception as e:
+    logger.warning("Unable to obtain parole date from DOC: "+str(e))
   # collapse paroled date / projected parole date into one field
   if res:
     res = res[0]

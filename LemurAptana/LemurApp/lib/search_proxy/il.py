@@ -90,6 +90,7 @@ def _search_list(first_name, last_name):
 
 
 def _search_inmate_id(inmate_id):
+  # URL is from iframe on https://idoc.illinois.gov/offender/inmatesearch.html
   url = "https://www.idoc.state.il.us/subsections/search/ISinms2.asp"
   r = requests.post(url, {
     "selectlist1": "IDOC",

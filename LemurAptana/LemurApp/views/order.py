@@ -183,7 +183,6 @@ def order_build(request):
 
   context_dict['currentOrderHTML'] = order_get_snippet_html(request)
   context_dict['currentOrderWarningsHTML'] = order_get_warnings_html(request)
-  #return render_to_response('LemurApp/order_build.html', context_dict, context_instance=RequestContext(request))
   return render(request, 'LemurApp/order_build.html', context_dict)
 
 

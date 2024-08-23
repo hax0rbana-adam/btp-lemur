@@ -2,6 +2,7 @@ import json
 from datetime import datetime
 
 import logging
+from pickle import dumps, loads
 #from django.core.urlresolvers import reverse
 from django.urls import reverse
 from django.http import HttpResponseBadRequest, HttpResponse, Http404, JsonResponse
@@ -25,12 +26,12 @@ def order_create(request, inmate_pk):
     order.inmate = inmate
     order.status = 'OPEN'
     order.save()
-    # save this order in the session
-    request.session['order'] = order
+    # save this order's primary key in the session
+    request.session['order'] = order.pk
     # redirect to the order_build view via named URLs to start adding books
     return redirect(reverse('order-build'))
   except Inmate.DoesNotExist:
-    print("There is no inmate with primary key " + request.session['inmate'])
+    print("There is no inmate with primary key " + inmate_pk)
     raise
 
 
@@ -53,11 +54,11 @@ def order_add_book(request, book):
      Saves the book to do so"""
   try:
     # now add this book to the current order and save it
-    book.order = request.session['order']
+    book.order = get_object_or_404(Order, pk=request.session['order'])
     book.save()
   except KeyError:
     # there is no current order
-    print("Tried to add a book to current order, but there isn't a current order")
+    logging.error("Tried to add a book to current order, but there isn't a current order")
     raise KeyError
 
 
@@ -65,7 +66,7 @@ def order_remove_book(request, book_pk):
   """Remove the given book from the current order and delete it"""
   try:
     book = get_object_or_404(Book, pk=book_pk)
-    if book.order == request.session['order']:
+    if book.order == get_object_or_404(Order, pk=request.session['order']):
       book.delete()
     else:
       raise Exception("Tried to remove a book from the current order that wasn't in the current order")
@@ -103,7 +104,8 @@ def order_render_as_response(request):
 
 def order_get_snippet_html(request):
   """Renders the current order as a snippet of HTML"""
-  return render_to_string('LemurApp/order_snippet.html')
+  order = get_object_or_404(Order, pk=request.session['order'])
+  return render_to_string('LemurApp/order_snippet.html', context={"order": order})
 
 
 def order_get_summary_html(request):
@@ -113,7 +115,8 @@ def order_get_summary_html(request):
 
 def order_get_warnings_html(request):
   """Renders the current order's warnings in a list as a snippet of HMTL"""
-  return render_to_string('LemurApp/order_warnings.html')
+  order = get_object_or_404(Order, pk=request.session['order'])
+  return render_to_string('LemurApp/order_warnings.html', context={"order": order})
 
 
 def order_build(request):
@@ -220,7 +223,7 @@ def order_unset(request):
 def order_set(request, order_pk):
   """Select the given order and set it as the current order in session, then
      redirect to the order_build page."""
-  request.session['order'] = get_object_or_404(Order, pk=order_pk)
+  request.session['order'] = order_pk
   return redirect(reverse('order-build'))
 
 
@@ -235,6 +238,6 @@ def order_reopen(request, order_pk):
 
 def order_current(request):
   if request.session.get('order'):
-    return JsonResponse({'current_order_id': request.session['order'].pk})
+    return JsonResponse({'current_order_id': request.session['order']})
   else:
     return JsonResponse({})

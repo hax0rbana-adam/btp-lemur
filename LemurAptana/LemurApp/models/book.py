@@ -2,7 +2,7 @@ from django.utils import timezone
 
 from django.db import models
 
-from LemurAptana.LemurApp.lib import google_books
+from LemurAptana.LemurApp.lib import open_library
 
 
 class Book(models.Model):
@@ -41,7 +41,7 @@ class Book(models.Model):
     Raises InvalidParameterValue (from the item_lookup call) if the ISBN isn't found
     """
     try:
-      booktuple = google_books.search_isbn(isnb_)
+      booktuple = open_library.search_isbn(isnb_)
       if not booktuple:
         return
       book = Book()

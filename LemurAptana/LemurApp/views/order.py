@@ -11,8 +11,8 @@ from django.template import RequestContext
 from django.template.loader import render_to_string
 
 from LemurAptana.LemurApp import forms
-from LemurAptana.LemurApp.lib import isbn, google_books
-from LemurAptana.LemurApp.lib.google_books import booktuple
+from LemurAptana.LemurApp.lib import isbn, open_library
+from LemurAptana.LemurApp.lib.open_library import booktuple
 from LemurAptana.LemurApp.models import Inmate, Order, Book
 
 
@@ -140,23 +140,22 @@ def order_build(request):
   # If it's a real search, do a Google search and display the results
   if request.GET.get('whichForm', False) == 'search':
     context_dict['formSearch'] = forms.BookForm(request.GET, auto_id='search_id_%s')
-    power = []
+    search_parameters = {}
     if request.GET.get('author', False):
-      power += ['inauthor:' + request.GET['author']]
+      search_parameters["author"] = request.GET['author']
     if request.GET.get('title', False):
-      power += ['intitle:' + request.GET['title']]
-    if not power:
+      search_parameters["title"] = request.GET['title']
+    if not search_parameters:
       # If we wanted to do something special for searching with all fields empty we could here,
       # but for now just let Google return whatever
       pass
 
-    # Do the power search
     try:
       page = int(request.GET.get('page', '1'))
     except ValueError:
       # if for some reason 'page' is a GET parameter but not a valid number, just default to 1
       page = 1
-    search_result = google_books.search(q=power, page=page)
+    search_result = open_library.search(search_parameters, page=page)
 
     if search_result.pages:
       context_dict['books'] = []

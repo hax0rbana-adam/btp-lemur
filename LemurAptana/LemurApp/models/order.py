@@ -54,7 +54,7 @@ class Order(models.Model):
         raise ValidationError('Sent orders need closed dates, and this order [%s] lacks one!' % self)
       else:
         # order is sent and has a closed date, so make sure the closed date is after the open date
-        if self.date_closed < self.date_opened:
+        if self.date_closed.timestamp() < self.date_opened.timestamp():
           raise ValidationError('Closed date for this order is before its open date!')
 
   def warnings(self):

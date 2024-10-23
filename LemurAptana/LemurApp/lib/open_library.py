@@ -21,8 +21,9 @@ def search(parameters, page=0):
   while i < len(items) and len(results) < RESULTS_PER_PAGE:
     item = items[i]
     if "isbn" in item:  # omit books without an isbn
+      author = item["author_name"][0] if "author_name" in item.keys() else ""
       results.append(type("book", (object,), {"title": item["title"],
-                                              "author": item["author_name"][0],
+                                              "author": author,
                                               "isbn": item["isbn"][0]}))
     i += 1
   return type("SearchResults", (object,), {"pages": response["numFound"] // RESULTS_PER_PAGE,

@@ -185,6 +185,8 @@ def order_build(request):
           context_dict['errors'] += [
             "If you enter both a title and an author in the search form you can manually enter the book."]
     except HTTPError as e:
+      logging.error("OpenLibrary.org is currently not working")
+      logging.debug("HTTPError from OpenLibrary: "+str(e))
       context_dict['errors'] += [
         "OpenLibrary is not working to look up titles/authors/ISBN. Please enter book title manually."]
 

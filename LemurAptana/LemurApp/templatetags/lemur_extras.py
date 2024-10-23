@@ -35,7 +35,7 @@ def inmate_doc_link(inmate_pk, link_text):
                     </select>
                     <input type="text" size="16" name="idoc" value="%(inmate_id)s" maxlength="25" />
                 </form>
-                <a href="javascript:$('#inmateform%(inmate_pk)s').submit()">%(link_text)s</a>
+                <a onclick="$('#inmateform%(inmate_pk)s').submit(); return false;">%(link_text)s</a>
                 ''' % {'inmate_id': inmate.inmate_id_formatted(), 'link_text': link_text, 'inmate_pk': inmate.pk})
     elif inmate.inmate_type() == Inmate.InmateType.KENTUCKY:
         if inmate.inmate_doc_id:

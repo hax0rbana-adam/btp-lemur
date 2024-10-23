@@ -48,6 +48,7 @@ def search_isbn(isbn):
       # Something went wrong other than that the isbn wasn't found
       error("Unable to lookup ISBN. e="+e)
     return None
+  author = response["personal_name"] if "personal_name" in response.keys() else ""
   return type("book", (object,), {"title": title,
-                                  "author": response["personal_name"],
+                                  "author": author,
                                   "isbn": isbn})

@@ -9,21 +9,35 @@
 
 Python dependencies listed in requirements.txt
 
-Also requires a Google Books API key, yarn, webpack, MySQL or sqlite
+Also requires a yarn, webpack, MySQL or sqlite
 
 To run tests:
 `./manage.py test`
 
 
 To run the server locally:
--) sudo apt install -y default-libmysqlclient-dev pkg-config npm python3-docutils python3-levenshtein python3-setuptools
+-) sudo apt install -y default-libmysqlclient-dev pkg-config npm python3-docutils python3-levenshtein python3-setuptools mariadb-server
 -) sudo npm install --global yarn
 -) install client deps with `yarn` in root directory
 -) install webpack globally if it isn't with `yarn global add webpack` (webpack 2.5.1 works)
 -) Build/watch webpack assets with `./node_modules/webpack/bin/webpack.js` in base project directory
 -) pip install -r requirements.txt
 -) set up settings_secret.py; use SqlLite database
+-) Run `python manage.py migrate` to set up the database tables
 -) Run development server with `./manage.py runserver 0.0.0.0:8000`
+
+For mysql/mariadb, to create a user run `sudo mysql` and run this:
+
+```sql
+CREATE USER 'username'@'localhost' IDENTIFIED BY 'password';
+CREATE DATABASE IF NOT EXISTS lemur;
+GRANT ALL PRIVILEGES ON lemur.* TO 'username'@'localhost';
+GRANT ALL PRIVILEGES ON test_lemur.* TO 'username'@'localhost';
+SHOW GRANTS FOR 'username'@'localhost';
+exit
+```
+
+To get an SQL prompt as that user: `mysql -u username -p`
 
 Note: if you want to access your local dev server from another computer, add
 `ALLOWED_HOSTS = ['192.168.1.37']` to LemurAptana/settings.py (swapping in the

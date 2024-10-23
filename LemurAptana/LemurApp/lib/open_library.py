@@ -37,7 +37,7 @@ def search_isbn(isbn):
   except HTTPError as e:
     if e.getcode() != 404:
       # Something went wrong other than that the isbn wasn't found
-      error("Unable to lookup ISBN. e="+e)
+      error("Unable to lookup ISBN. e="+str(e))
     return None
 
   title = response["title"]
@@ -46,7 +46,7 @@ def search_isbn(isbn):
   except HTTPError as e:
     if e.getcode() != 404:
       # Something went wrong other than that the isbn wasn't found
-      error("Unable to lookup ISBN. e="+e)
+      error("Unable to lookup ISBN. e="+str(e))
     return None
   author = response["personal_name"] if "personal_name" in response.keys() else ""
   return type("book", (object,), {"title": title,

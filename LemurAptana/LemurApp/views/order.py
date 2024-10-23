@@ -3,6 +3,7 @@ from datetime import datetime
 
 import logging
 from pickle import dumps, loads
+from urllib.error import HTTPError
 #from django.core.urlresolvers import reverse
 from django.urls import reverse
 from django.http import HttpResponseBadRequest, HttpResponse, Http404, JsonResponse
@@ -155,33 +156,37 @@ def order_build(request):
     except ValueError:
       # if for some reason 'page' is a GET parameter but not a valid number, just default to 1
       page = 1
-    search_result = open_library.search(search_parameters, page=page)
-
-    if search_result.pages:
-      context_dict['books'] = []
-      context_dict['books'] = search_result.books
-      context_dict['totalPages'] = search_result.pages
-      if search_result.pages > 1:
-        context_dict['pagination'] = True
-      context_dict['currPage'] = page
-      context_dict['nextPage'] = page + 1
-      context_dict['prevPage'] = page - 1
-    else:
-      # There weren't any results from our Amazon query
-      context_dict['errors'] += [
-        "No books matching the title/author you entered were found, try double-checking your spelling."]
-      if request.GET.get('author') and request.GET.get('title'):
-        # If the user entered both an author and a title, create a new dummy book result to use instead of real
-        # results with the entered form data
-        context_dict['errors'] += [
-          "If you're certain the title and author you entered are correct, you can manually add the book below."]
-        book = booktuple(title=request.GET['title'], author=request.GET['author'], isbn='')
-        context_dict['books'] = [book]
-        context_dict['custom_book'] = True
+    search_result = None
+    try:
+      search_result = open_library.search(search_parameters, page=page)
+      if search_result != None and search_result.pages:
+        context_dict['books'] = []
+        context_dict['books'] = search_result.books
+        context_dict['totalPages'] = search_result.pages
+        if search_result.pages > 1:
+          context_dict['pagination'] = True
+        context_dict['currPage'] = page
+        context_dict['nextPage'] = page + 1
+        context_dict['prevPage'] = page - 1
       else:
-        # If we're missing the author or title prompt the user to enter both before we try making a dummy book
+        # There weren't any results from our Amazon query
         context_dict['errors'] += [
-          "If you enter both a title and an author in the search form you can manually enter the book."]
+          "No books matching the title/author you entered were found, try double-checking your spelling."]
+        if request.GET.get('author') and request.GET.get('title'):
+          # If the user entered both an author and a title, create a new dummy book result to use instead of real
+          # results with the entered form data
+          context_dict['errors'] += [
+            "If you're certain the title and author you entered are correct, you can manually add the book below."]
+          book = booktuple(title=request.GET['title'], author=request.GET['author'], isbn='')
+          context_dict['books'] = [book]
+          context_dict['custom_book'] = True
+        else:
+          # If we're missing the author or title prompt the user to enter both before we try making a dummy book
+          context_dict['errors'] += [
+            "If you enter both a title and an author in the search form you can manually enter the book."]
+    except HTTPError as e:
+      context_dict['errors'] += [
+        "OpenLibrary is not working to look up titles/authors/ISBN. Please enter book title manually."]
 
   context_dict['currentOrderHTML'] = order_get_snippet_html(request)
   context_dict['currentOrderWarningsHTML'] = order_get_warnings_html(request)

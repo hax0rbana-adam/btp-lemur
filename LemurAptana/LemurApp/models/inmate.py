@@ -72,6 +72,7 @@ class Inmate(models.Model):
   inmate_id = InmateIDField(max_length=250, verbose_name="Inmate ID", unique=True, null=True)
   # in some cases the relevant DOC site stores inmate IDs in a different format, we cache this internally to make
   # lookups easier
+  id = models.AutoField(primary_key=True)
   inmate_doc_id = models.CharField(max_length=250, verbose_name="Inmate DOC ID", blank=True, default="")
   first_name = models.CharField(max_length=250, verbose_name="First name")
   last_name = models.CharField(max_length=250, verbose_name="Last name")

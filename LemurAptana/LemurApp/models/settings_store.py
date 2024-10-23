@@ -2,6 +2,7 @@ from django.db import models
 
 
 class LemurSettingsStore(models.Model):
+  id = models.AutoField(primary_key=True)
   settingName = models.CharField(max_length=250, unique=True)
   settingValue = models.CharField(max_length=250)
 

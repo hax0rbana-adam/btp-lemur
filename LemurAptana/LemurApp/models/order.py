@@ -20,6 +20,7 @@ class Order(models.Model):
   )
 
   # actual fields
+  id = models.AutoField(primary_key=True)
   status = models.CharField(max_length=20, choices=ORDER_STATUS, default='OPEN', verbose_name="Order status")
   inmate = models.ForeignKey(Inmate, verbose_name="Inmate", related_name="orders", on_delete=models.CASCADE)
   date_opened = models.DateTimeField(default=timezone.now, editable=False, verbose_name="Date opened")

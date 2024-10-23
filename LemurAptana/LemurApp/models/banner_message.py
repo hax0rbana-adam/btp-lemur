@@ -14,7 +14,7 @@ class BannerMessage(models.Model):
   """
   message = models.CharField(max_length=250, unique=True)
   # this should be set to 1 for the banner message entry row
-  handle = models.IntegerField(unique=True, verbose_name="Handle (leave this as 1!)")
+  handle = models.IntegerField(primary_key=True, unique=True, verbose_name="Handle (leave this as 1!)")
 
   def __str__(self):
     return self.message

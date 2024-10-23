@@ -9,6 +9,7 @@ class Book(models.Model):
   """Books, which are either user-entered or pulled from Amazon"""
   # ISBN number. Going forward these are ISBN-13 strings, but historically they were ASINs (Amazon's superset of
   # ISBN) -- hence the weird ASIN name
+  id = models.AutoField(primary_key=True)
   asin = models.CharField(max_length=13, verbose_name="ISBN", blank=True, null=True)
   title = models.CharField(max_length=250, verbose_name="Title")
   author = models.CharField(max_length=250, verbose_name="Author", blank=True)

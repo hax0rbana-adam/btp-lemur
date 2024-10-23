@@ -19,6 +19,7 @@ class FacilityManager(models.Manager):
 class Facility(models.Model):
   """Inmate facilities (locations)"""
 
+  id = models.AutoField(primary_key=True)
   name = models.CharField(max_length=250, unique=True)
   restrictsHardbacks = models.BooleanField(verbose_name="This facility restricts hardbacks", default=False)
   otherRestrictions = models.CharField(max_length=250, default="", blank=True, verbose_name="Other Restrictions")

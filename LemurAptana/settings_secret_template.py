@@ -16,9 +16,6 @@ DATABASES = {
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = 'MAKETHISSOMETHINGREALLYGOOD'
 
-# Extra settings for the Lemur project
-GBOOKS_KEY = ''   # must set this
-
 RAVEN_CONFIG = {
   'dsn': '',    # must set this
   # If you are using git, you can also automatically configure the

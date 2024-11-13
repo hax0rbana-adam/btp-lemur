@@ -61,6 +61,91 @@ Note: if you want to access your local dev server from another computer, add
 server's IP address or FQDN in place of the example IP address)
 
 # Production access
+
+## Setup
+
+Check out the repo, and then run the following commands in the root of the repo.
+
+```
+# Check out the code
+git clone https://github.com/hax0rbana-adam/btp-lemur
+cd btp-lemur
+
+# Install the dependencies
+sudo apt install -y default-libmysqlclient-dev pkg-config npm python3-pip python3-docutils python3-levenshtein python3-setuptools mariadb-server python3-virtualenv python3-venv nginx python3-django-uwsgi
+sudo npm install --global yarn
+yarn
+yarn global add webpack
+./node_modules/webpack/bin/webpack.js
+
+# Set up the virtual environment
+python3 -m venv .
+. bin/activate
+pip install -r requirements.txt
+
+# Set up the database
+echo "CREATE USER 'username'@'localhost' IDENTIFIED BY 'password';
+CREATE DATABASE IF NOT EXISTS lemur;
+GRANT ALL PRIVILEGES ON lemur.* TO 'username'@'localhost';
+GRANT ALL PRIVILEGES ON test_lemur.* TO 'username'@'localhost';
+SHOW GRANTS FOR 'username'@'localhost';
+exit" | sudo mysql
+
+# Configure the application
+cp LemurAptana/settings_secret_template.py LemurAptana/settings_secret.py
+sed -e "s/'ENGINE': 'django.db.backends.sqlite3'/'ENGINE': 'django.db.backends.mysql'/" -i LemurAptana/settings_secret.py
+sed -e "s/'NAME': 'sqlite.db'/'NAME': 'lemur'/" -i LemurAptana/settings_secret.py
+sed -e "s/# 'USER': ''/'USER': 'username'/" -i LemurAptana/settings_secret.py
+sed -e "s/# 'PASSWORD': ''/'PASSWORD': 'password'/" -i LemurAptana/settings_secret.py
+sed -e "s/ALLOWED_HOSTS.*/ALLOWED_HOSTS = ['127.0.0.1']/" -i LemurAptana/settings.py
+
+# Set up the database and static files
+python3 manage.py migrate
+python3 manage.py collectstatic
+deactivate
+cd ..
+
+# Move the files into /var/www so the www-data user can access them
+sudo mv btp-lemur /var/www
+sudo chown -R www-data:www-data /var/www/btp-lemur
+
+# Configure nginx to point to our static files and the uWSGI socket
+sudo cp /var/www/btp-lemur/nginx-default.conf /etc/nginx/sites-available/default
+sudo systemctl restart nginx
+
+# Optional: Browse to http://127.0.0.1/static/css/style.css as a test
+
+# Set up uwsgi as a systemd service to run Lemur
+sudo cp /var/www/btp-lemur/uwsgi-lemur.service /etc/systemd/system/
+sudo systemctl enable uwsgi-lemur.service
+sudo systemctl start uwsgi-lemur.service
+sudo systemctl status uwsgi-lemur.service
+```
+
+At this point the uwsgi-lemur service should be running, there should be a
+lemur.sock file that nginx can connect to, it should be owned by www-data and
+in the www-data group, and permissions should be 600.  You should now be able
+to navigate to http://127.0.0.1 and see Lemur.
+
+At this point an admin should go in and set up the database at
+http://127.0.0.1/admin as described in the "Administration setup" section
+below.
+
+If something goes wrong, here are some tips for debugging:
+
+```
+. bin/activate
+uwsgi --http :8000 --module LemurAptana.wsgi
+# browse to localhost:8000 to verify uWSGI & Django are working as expected
+# if everything looks good, stop any uwsgi services that might be running
+# and manually start up uwsgi to verify that's working as expected
+uwsgi_python3 --ini uwsgi.ini --chmod-socket=666
+```
+
+For more information, see the
+[Django and nginx tutorial](https://uwsgi-docs.readthedocs.io/en/latest/tutorials/Django_and_nginx.html).
+
+## Management
 To manage the server in production:
 -) Various packages need be installed, including: `apt-get install libffi-dev`
 -) Use lemur-fcgi.conf in /etc/init/

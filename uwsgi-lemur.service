@@ -1,0 +1,23 @@
+# Put this in /etc/systemd/system/ and then enable and start it with:
+# systemctl enable uwsgi-lemur
+# systemctl start uwsgi-lemur
+#
+# If something goes wrong, logs can be viewed with journalctl, like so:
+# sudo journalctl -eu uwsgi-lemur
+
+[Unit]
+Description=Lemur uwsgi service
+
+[Service]
+ExecStart=/usr/bin/uwsgi_python3 --ini /var/www/btp-lemur/uwsgi.ini
+RuntimeDirectory=uwsgi
+User=www-data
+Group=www-data
+Restart=always
+KillSignal=SIGQUIT
+Type=notify
+StandardError=syslog
+NotifyAccess=all
+
+[Install]
+WantedBy=multi-user.target

@@ -23,6 +23,7 @@ To run the server locally:
 -) Build/watch webpack assets with `./node_modules/webpack/bin/webpack.js` in base project directory
 -) If you want to use a virtual environment:
   -) sudo apt install python3-venv
+  -) python3 -m venv .
   -) . bin/activate
   -) pip install -r requirements.txt
 -) If you want do not want to use a virtual environment:
